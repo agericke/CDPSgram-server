@@ -1,13 +1,28 @@
 <%
 var photos_url = process.env.PHOTOS_URL || "http://localhost:8000";
 %>
-<form action="/photos" method="post">  
+<form class="form-horizontal" action="/albums/<%= album.id %>/new" method="post">  
 	<label class="upload_field">Upload a new photo:</label>
-	<span class="upload_field"> Photo name: <input type="text" name="name"></span><br>
+
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="name">Photo name:</label>
+		<div class="col-sm-10">
+			<input class="form-control" type="text" name="name"></span><br>
+		</div>
+	</div>
+
 	<input type="hidden" name="url">
-	<input class="upload_field" type="file" name="photo"/>
-	<button class="hint upload_field">Upload</button>
-	<span class="hint upload_field">Supported files: PNG, JPG, JPEG, ...</span>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<input class="file" type="file" name="photo"/>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button class="btn btn-primary">Upload</button>
+			<span class="hint upload_field">Supported files: PNG, JPG, JPEG, ...</span>
+		</div>
+	</div>
 </form>
 
 <script type="text/javascript">

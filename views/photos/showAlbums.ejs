@@ -1,0 +1,26 @@
+
+<div class="list-group">
+	<% if (albums.length != 0) { %>
+		<%for (var t in albums) {%>
+
+			<a class="list-group-item" href='/albums/<%=albums[t].id%>'>
+				<p><%=albums[t].name%>
+					<% if (albums[t].isPrivate) { %>
+						<%="(Private)"%>
+					<%} else {%>
+						<%="(Public)"%>
+					<%}%>
+				</p>
+			</a>
+
+		<%}%>
+	<%} else {%>
+		<p>No albums created</p>
+	<%}%>
+</div>
+<% if (session.user) {%>
+<% if (session.user.id === albums[0].UserId) {%>
+	<a href='/albums/new'><input type="button" class="btn btn-primary" value="Create new album"/></a>
+<% } %>
+<% } %>
+

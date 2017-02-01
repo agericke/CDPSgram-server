@@ -1,10 +1,20 @@
 
-
-<%for (var t in photos) {%>
-
-<a class="photo" href='/photos/<%=t%>'>
-	<img src="<%=photos[t].url%>">
-	<p><%=photos[t].name%></p>
-</a>
-
-<%}%>
+<div class="container-fluid bg-3 text-center">
+	<% if (photos.length != 0) { %>
+	<% for (var t in photos) {%>
+	 	<div class="col-sm-4">
+			<div class="thumbnail">
+			<a class="photo" href='/photos/<%=photos[t].id%>'>
+				<img class="img-circle" height="100" src="<%=photos[t].url%>">
+				<div class="caption">
+				<p><%=photos[t].name%></p>
+				<p class="badge"><%=photos[t].likes%></p>
+				</div>
+			</a>
+			</div>
+		</div>
+	<%}%>
+	<%} else {%>
+		<p>No photos yet</p>
+	<%}%>
+</div>

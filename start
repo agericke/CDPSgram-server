@@ -1,0 +1,5 @@
+cd /root/CDPSgram-server
+rm quiz.sqlite
+npm run-script migrate_local
+npm run-script seed_local
+npm start

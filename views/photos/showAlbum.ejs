@@ -1,0 +1,30 @@
+<h3><%= album.name %></h3>
+<p><% if (album.isPrivate) { %>
+	<%="Private Album"%>
+<%} else {%>
+	<%="Public Album"%>
+<%}%>
+</p>
+<div class="container-fluid bg-3 text-center">
+<%for (var t in photos) {%>
+<div class="col-sm-4">
+<div class="thumbnail">
+<a class="photo" href='/photos/<%=photos[t].id%>'>
+	<img class="img-circle" height="100" src="<%=photos[t].url%>">
+	<div class="caption">
+	<p><%=photos[t].name%></p>
+	<p class="badge"><%=photos[t].likes%></p>
+	</div>
+</a>
+</div>
+</div>
+<%}%>
+</div>
+<% if (session.user) {%>
+<% if (session.user.id === album.UserId) {%>
+	<div class="btn-group pagination-centered">
+		<a href='/albums/<%= album.id %>?_method=DELETE'><input type="button" class="btn btn-primary" value="Delete album"/></a>
+		<a href="/albums/<%= album.id %>/new"><input type="button" class="btn btn-primary" value="Upload new photo"/></a>
+	</div>
+<% } %>
+<% } %>

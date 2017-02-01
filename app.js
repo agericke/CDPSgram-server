@@ -1,4 +1,6 @@
 var express = require('express');
+var session = require('express-session')
+var flash = require('express-flash')
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -19,11 +21,16 @@ app.use(partials());
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(flash());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(methodOverride('_method'));
-
+app.use(session({secret:"CDPS", resave: false, saveUninitialized:true}));
+app.use(methodOverride('_method', {methods:["POST","GET"]}));
+app.use(function(req,res,next){
+  res.locals.session = req.session;
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 

@@ -1,19 +1,55 @@
 <%
 var photos_url = process.env.PHOTOS_URL || "http://localhost:8000";
 %>
-<div class="photo photo_playing">
-	<p><%=photo.name%></p>
-	<img src="<%=photo.url%>"></img>
+
+<div class="panel panel-primary">
+	<div class="panel-heading text-center"><h4><%=photo.name%></h4></div>
+	<div class="panel-body text-center"><img class="img-rounded" src="<%=photo.url%>"></img></div>
+	<div class="panel-footer text-center">
+		<button type="button" class="btn btn-primary" onclick="window.location.href='/photos/<%= photo.id %>/like?_method=PUT';">Like <span class="badge"><%=photo.likes%></span></button>
+	</p>
+	<% if (session.user) {%>
+		<% if (session.user.id === photo.UserId) {%>
+			<form method="post" id="formDelete" action="/photos/<%=photo.id%>?_method=delete">
+			    <button class="btn btn-primary" id="delete" onClick="return confirm('Delete: <%=photo.name%>. Are you sure? ');">
+			      Delete photo
+			    </button>
+		  	</form>
+	  	<% } %>
+  	<% } %>
+  	</div>
+</div>
+
+
+<div class="thumbnail">
 	
-	<form method="post" action="/photos/<%=photo.id%>?_method=delete">
-	    <button onClick="return confirm('Delete: <%=photo.name%>. Are you sure? ');">
-	      Delete photo
-	    </button>
-  	</form>
+	<%for (var t in comments) {%>
+		<div class="media">
+			<div class="media-body">
+			<h4 class="media-heading"><strong><%=comments[t].User.username%></strong> <small><i>Posted on <%=comments[t].createdAt.getDate()%>/<%=comments[t].createdAt.getMonth() + 1%>/<%=comments[t].createdAt.getFullYear()%>, <%=comments[t].createdAt.getHours()%>:<%=comments[t].createdAt.getMinutes()%></i></small></h4> 
+			<p><medium><%=comments[t].text%></medium></p>
+		</div>
+	<%}%>
+
+	<% if (session.user) {%>
+		<div class="media">
+		<div class="media-footer">
+	    <form class="form-horizontal text-center" method='POST' action='/photos/<%=photo.id%>/comment'>
+	    	<div class="form-group">
+	    		<div class="col-sm-10">
+	        		<input class="form-control" type="text" id="comment" name="comment[text]" value="" placeholder="New comment" />
+	        	</div>
+	        	<input type="submit" class="btn btn-primary col-sm-1" value="Send" onClick="this.disable=true; this.value ='Sending...'; this.form.submit();"/>
+	        </div>
+	    </form>
+	    </div>
+	    </div>
+    <% } %>
+    
 </div>
 
 <script type="text/javascript">
-$('button').click(function (evt) {
+$("#delete").click(function (evt) {
 
 	evt.preventDefault();
 	var url = '<%=photo.url%>';
@@ -25,7 +61,7 @@ $('button').click(function (evt) {
 		statusCode: {
 			200: function (data, status, xhr) {
 				// Una vez borrada envía al servidor CDPSgram-server la petición para eliminar la entrada en la base de datos
-				$('form').submit();
+				$("#formDelete").submit();
 			}
 		}
 	});
